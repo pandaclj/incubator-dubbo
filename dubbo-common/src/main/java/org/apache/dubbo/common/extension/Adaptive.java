@@ -54,7 +54,10 @@ public @interface Adaptive {
      * <code>String[] {"yyy.invoker.wrapper"}</code>. This name will be used to search for parameter from URL.
      *
      * @return parameter key names in URL
-     */
+     *
+     * 决定着哪个目标扩展会被注入。目标扩展名由参数决定。
+     * 在URL中，参数名由该方法给出。
+     * */
     String[] value() default {};
 
 }

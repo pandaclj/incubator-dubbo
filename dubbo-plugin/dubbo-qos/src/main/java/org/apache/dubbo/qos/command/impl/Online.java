@@ -36,7 +36,7 @@ import java.util.Set;
         "online dubbo",
         "online xx.xx.xxx.service"
 })
-public class Online implements BaseCommand {
+public class  Online implements BaseCommand {
     private Logger logger = LoggerFactory.getLogger(Online.class);
     private RegistryFactory registryFactory = ExtensionLoader.getExtensionLoader(RegistryFactory.class).getAdaptiveExtension();
 

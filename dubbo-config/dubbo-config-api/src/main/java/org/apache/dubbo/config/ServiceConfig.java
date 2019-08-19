@@ -262,12 +262,17 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
     public void checkAndUpdateSubConfigs() {
         // Use default configs defined explicitly on global configs
+        //完善一些全局属性
         completeCompoundConfigs();
         // Config Center should always being started first.
         startConfigCenter();
+        //校验provider
         checkDefault();
+        //校验Application
         checkApplication();
+        //校验Registry
         checkRegistry();
+        //校验Protocol
         checkProtocol();
         this.refresh();
         checkMetadataReport();
@@ -325,6 +330,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
 
     public synchronized void export() {
+        //检查配置
         checkAndUpdateSubConfigs();
 
         if (provider != null) {
@@ -339,6 +345,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             return;
         }
 
+        //延迟发布服务
         if (delay != null && delay > 0) {
             delayExportExecutor.schedule(this::doExport, delay, TimeUnit.MILLISECONDS);
         } else {
@@ -397,6 +404,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrls() {
+        //加载注册信息
         List<URL> registryURLs = loadRegistries(true);
         for (ProtocolConfig protocolConfig : protocols) {
             doExportUrlsFor1Protocol(protocolConfig, registryURLs);
@@ -411,12 +419,14 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(Constants.SIDE_KEY, Constants.PROVIDER_SIDE);
+        //通过get方法获取属性放置于Map中
         appendRuntimeParameters(map);
         appendParameters(map, application);
         appendParameters(map, module);
         appendParameters(map, provider, Constants.DEFAULT_KEY);
         appendParameters(map, protocolConfig);
         appendParameters(map, this);
+        //methods对应于dubbo:method配置
         if (methods != null && !methods.isEmpty()) {
             for (MethodConfig method : methods) {
                 appendParameters(map, method, method.getName());
@@ -511,6 +521,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         Integer port = this.findConfigedPorts(protocolConfig, name, map);
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
 
+        //protocol扩展点
         if (ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)
                 .hasExtension(url.getProtocol())) {
             url = ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)
@@ -744,6 +755,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
 
     private void completeCompoundConfigs() {
+        //对应于"dubbo:provider"
         if (provider != null) {
             if (application == null) {
                 setApplication(provider.getApplication());
@@ -764,6 +776,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 setConfigCenter(provider.getConfigCenter());
             }
         }
+        //对应于"dubbo:module"
         if (module != null) {
             if (registries == null) {
                 setRegistries(module.getRegistries());
@@ -772,6 +785,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 setMonitor(module.getMonitor());
             }
         }
+        //对应于"dubbo:application"
         if (application != null) {
             if (registries == null) {
                 setRegistries(application.getRegistries());
@@ -992,7 +1006,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
     @Parameter(excluded = true)
     public String getUniqueServiceName() {
-        StringBuilder buf = new StringBuilder();
+                                                                                                                      StringBuilder buf = new StringBuilder();
         if (group != null && group.length() > 0) {
             buf.append(group).append("/");
         }

@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * 组合配置
  */
 public class CompositeConfiguration implements Configuration {
     private Logger logger = LoggerFactory.getLogger(CompositeConfiguration.class);

@@ -543,6 +543,7 @@ public abstract class AbstractConfig implements Serializable {
     /**
      * TODO: Currently, only support overriding of properties explicitly defined in Config class, doesn't support
      * overriding of customized parameters stored in 'parameters'.
+     * 目前，只支持覆盖明确定义在Config类中的属性，不支持覆盖定义在"parameters"中的属性
      */
     public void refresh() {
         try {

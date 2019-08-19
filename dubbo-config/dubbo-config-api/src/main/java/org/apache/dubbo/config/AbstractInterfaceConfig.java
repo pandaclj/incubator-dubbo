@@ -238,6 +238,7 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
             this.configCenter.refresh();
             prepareEnvironment();
         }
+        //刷新所有配置,利用反射覆盖属性
         ConfigManager.getInstance().refreshAll();
     }
 

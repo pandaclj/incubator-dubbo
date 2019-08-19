@@ -429,7 +429,16 @@ public class ExtensionLoaderTest {
     @Test
     public void testInjectExtension() {
         // test default
-        InjectExt injectExt = ExtensionLoader.getExtensionLoader(InjectExt.class).getExtension("injection");
+//        InjectExt injectExt = ExtensionLoader.getExtensionLoader(InjectExt.class).getExtension("injection");
+
+        ExtensionLoader<InjectExt> extExtensionLoader = ExtensionLoader.getExtensionLoader(InjectExt.class);
+
+        try {
+            extExtensionLoader.getAdaptiveExtension();
+        } catch (Exception e) {
+            Assert.assertThat(e.getMessage(),containsString("Can not create adaptive extension"));
+        }
+        InjectExt injectExt = extExtensionLoader.getExtension("injection");
         InjectExtImpl injectExtImpl = (InjectExtImpl) injectExt;
         Assert.assertNotNull(injectExtImpl.getSimpleExt());
         Assert.assertNull(injectExtImpl.getSimpleExt1());
